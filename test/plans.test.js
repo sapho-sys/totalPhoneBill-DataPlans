@@ -29,30 +29,47 @@ describe("Testing functions with database logic", function(){
 
     it('should be able to get cost for SMS100 - Price Plan',async function(){
         let regEntry = dataFactory(db)
-        await regEntry.addData("sms100");
+        await regEntry.addData("Sapho","sms100");
         assert.deepEqual([ { call_price: 2.35 , sms_price: 0.20 } ], await regEntry.getData())
+    });
+    it('should be able to get cost for SMS100 - Price Plan',async function(){
+        let regEntry = dataFactory(db)
+        await regEntry.addData("","sms100");
+        assert.deepEqual("error provide your name and your prefered plan", await regEntry.errors())
     });
 
     it('should be able to get cost for CALL100 - Price Plan',async function(){
         let regEntry = dataFactory(db)
-        await regEntry.addData("call100");
+        await regEntry.addData("Thami","call100");
         assert.deepEqual([ { call_price: 1.75 , sms_price: 0.45 } ], await regEntry.getData())
     });
 
     it('should be able to get cost for text-me - Price Plan',async function(){
         let regEntry = dataFactory(db)
-        await regEntry.addData("text-me");
+        await regEntry.addData("Hluma","text-me");
         assert.deepEqual([ { call_price: 1.54 , sms_price: 0.17 } ], await regEntry.getData())
     });
 
-    it('should be able to get total',async function(){
+    it('should be able to get cost for Call',async function(){
         let regEntry = dataFactory(db)
-        await regEntry.addData("call100");
-        await regEntry.setType('Sms')
-        assert.deepEqual([ { call_price: 1.54 , sms_price: 0.17 } ], await regEntry.getTotalType())
+        await regEntry.addData("Thanos","call100");
+        
+        assert.deepEqual("01.75", await regEntry.getTotalType())
     });
 
+    it('should be able to get totalcost for Sms',async function(){
+        let regEntry = dataFactory(db)
+        await regEntry.addData("Thanos","sms100");
+        assert.deepEqual("02.35", await regEntry.getTotalType())
+    });
 
+    it('should be able to get totalcost for text-me',async function(){
+        let regEntry = dataFactory(db)
+        await regEntry.addData("Thanos","text-me");
+        assert.deepEqual("01.54", await regEntry.getTotalType())
+    });
+
+   
     
 
     
