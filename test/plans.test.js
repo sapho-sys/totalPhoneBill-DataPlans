@@ -21,58 +21,41 @@ const db = pgp(config);
 
 describe("Testing functions with database logic", function(){
 
-    // beforeEach(async function () {
-    //     // clean the tables before each test run
-    //     // await db.query('TRUNCATE TABLE reg_plates restart identity;');
-    //     await db.query('DELETE FROM reg_numbers;')
-    // });
-
-    it('should be able to get cost for SMS100 - Price Plan',async function(){
-        let regEntry = dataFactory(db)
-        await regEntry.addData("Sapho","sms100");
-        assert.deepEqual([ { call_price: 2.35 , sms_price: 0.20 } ], await regEntry.getData())
-    });
-    it('should be able to get cost for SMS100 - Price Plan',async function(){
-        let regEntry = dataFactory(db)
-        await regEntry.addData("","sms100");
-        assert.deepEqual("error provide your name and your prefered plan", await regEntry.errors())
+    beforeEach(async function () {
+        // clean the tables before each test run
+        await db.query('TRUNCATE TABLE users restart identity;');
+        await db.query('DELETE FROM users;')
     });
 
-    it('should be able to get cost for CALL100 - Price Plan',async function(){
+    it('should be able to allocate Sapho to the sms100 - Price Plan',async function(){
         let regEntry = dataFactory(db)
-        await regEntry.addData("Thami","call100");
-        assert.deepEqual([ { call_price: 1.75 , sms_price: 0.45 } ], await regEntry.getData())
+        await regEntry.Allocate("Sapho","sms100");
+        assert.deepEqual([ {id: 1 ,username: "Sapho",plan_id: 1 } ], await regEntry.getCustomers(1))
     });
 
-    it('should be able to get cost for text-me - Price Plan',async function(){
+    it('should be able to allocate Thanos to the call100 - Price Plan',async function(){
         let regEntry = dataFactory(db)
-        await regEntry.addData("Hluma","text-me");
-        assert.deepEqual([ { call_price: 1.54 , sms_price: 0.17 } ], await regEntry.getData())
+        await regEntry.Allocate("Thanos","call100");
+        assert.deepEqual([ { id: 1, username: 'Thanos', plan_id: 2 } ], await regEntry.getCustomers(2))
     });
 
-    it('should be able to get cost for Call',async function(){
+    it('should be able to get the total cost for a call & sms made by Hluma on call100 - Price Plan',async function(){
         let regEntry = dataFactory(db)
-        await regEntry.addData("Thanos","call100");
-        
-        assert.deepEqual("01.75", await regEntry.getTotalType())
+        await regEntry.Allocate("Hluma","call100");
+        const usage = "call, sms";
+        await regEntry.integrateData("Hluma", usage)
+        assert.deepEqual( "2", await regEntry.integrateData("Hluma", usage))
     });
 
-    it('should be able to get totalcost for Sms',async function(){
-        let regEntry = dataFactory(db)
-        await regEntry.addData("Thanos","sms100");
-        assert.deepEqual("02.35", await regEntry.getTotalType())
-    });
 
-    it('should be able to get totalcost for text-me',async function(){
-        let regEntry = dataFactory(db)
-        await regEntry.addData("Thanos","text-me");
-        assert.deepEqual("01.54", await regEntry.getTotalType())
-    });
+
 
    
     
 
-    
+    after( async function() {
+        db.$pool.end();
+    });
 
 
 })

@@ -17,3 +17,6 @@ CREATE TABLE users(
 INSERT INTO price_plans (plan_name,sms_price,call_price) VALUES ('sms100', 0.20 , 2.35);
 INSERT INTO price_plans (plan_name,sms_price,call_price) VALUES ('call100', 0.45 , 1.75);
 INSERT INTO price_plans (plan_name,sms_price,call_price) VALUES ('text-me', 0.17 , 1.54);
+
+
+ALTER TABLE users DROP COLUMN billTotals;
