@@ -43,44 +43,20 @@ function MyLogic(data){
    
    
      
-   ;
-
-    return totalAmt;
+   
+    return (totalAmt).toFixed(2);
 
 
 
   }
-
-  async function getTextCost(){
-    return  totalsmsCost
-  }
-
-  async function getCallCost(){
-    return totalcallCost
-  }
-
-  async function getTotal(){
-    return (await getTextCost() + await getCallCost() );
-
-  }
-  
-
-
-
    return {
     Allocate,
     enterData,
     getCustomers,
     getData,
-    integrateData,
-    getTextCost,
-    getCallCost,
-    getTotal
+    integrateData
    }
    
-
-
-
 }
 
 export default MyLogic;

@@ -44,7 +44,7 @@ describe("Testing functions with database logic", function(){
         await regEntry.Allocate("Hluma","call100");
         const usage = "call, sms";
         await regEntry.integrateData("Hluma", usage)
-        assert.deepEqual( "2", await regEntry.integrateData("Hluma", usage))
+        assert.deepEqual( "2.00", await regEntry.integrateData("Hluma", usage))
     });
 
 
